@@ -4,26 +4,64 @@
  * Description: Color genaretor application with huge DOM methods 
  */
 
+// Gobal Variables 
+const defaultPresetColors = [
+	'#ffcdd2',
+	'#f8bbd0',
+	'#e1bee7',
+	'#ff8a80',
+	'#ff80ab',
+	'#ea80fc',
+	'#b39ddb',
+	'#9fa8da',
+	'#90caf9',
+	'#b388ff',
+	'#8c9eff',
+	'#82b1ff',
+	'#03a9f4',
+	'#00bcd4',
+	'#009688',
+	'#80d8ff',
+	'#84ffff',
+	'#a7ffeb',
+	'#c8e6c9',
+	'#dcedc8',
+	'#f0f4c3',
+	'#b9f6ca',
+	'#ccff90',
+	'#ffcc80',
+    '#00ff00',
+];
+const copySound = new Audio('../audio/copy-sound.wav');
+let tostContainer = null;
+
 // onload handelers 
 window.onload = function() {
     main()
+    // Display color boxes
+    displayColorBox(defaultPresetColors);
 }
 
-function main() {
-    const randomColor = document.getElementById("random-color");
-    const displayColor = document.getElementById("display-color");
-    const hexOutput = document.getElementById("hex-output");
-    const rgbOutput = document.getElementById("rgb-output");
-    const colorLabelRed = document.getElementById("color-slider-red-label");
-    const colorLabelGreen = document.getElementById("color-slider-green-label");
-    const colorLabelBlue = document.getElementById("color-slider-blue-label");
-    const colorSliderRed = document.getElementById("color-slider-red");
-    const colorSliderGreen = document.getElementById("color-slider-green");
-    const colorSliderBlue = document.getElementById("color-slider-blue");
-    const hexMode = document.getElementById("hex-color-mode");
-    const rgbMode = document.getElementById("rgb-color-mode");
-    const copyBtn = document.getElementById("copy-color-code");
+// DOM references 
+const randomColor = document.getElementById("random-color");
+const displayColor = document.getElementById("display-color");
+const hexOutput = document.getElementById("hex-output");
+const rgbOutput = document.getElementById("rgb-output");
+const colorLabelRed = document.getElementById("color-slider-red-label");
+const colorLabelGreen = document.getElementById("color-slider-green-label");
+const colorLabelBlue = document.getElementById("color-slider-blue-label");
+const colorSliderRed = document.getElementById("color-slider-red");
+const colorSliderGreen = document.getElementById("color-slider-green");
+const colorSliderBlue = document.getElementById("color-slider-blue");
+const hexMode = document.getElementById("hex-color-mode");
+const rgbMode = document.getElementById("rgb-color-mode");
+const copyBtn = document.getElementById("copy-color-code");
+const presetColorParent = document.getElementById("preset-color");
+const tostMsg = document.getElementById("tost-msg");
+const tostCode = document.getElementById("tost-code");
 
+
+function main() {    
     randomColor.addEventListener('click', () => {
         const color = genaretColor();
         const hexColor = genaretHexColor(color);
@@ -34,7 +72,6 @@ function main() {
         rgbOutput.value = rgbColor;
         colorLabel(color)
     })
-
     // color label output
     function colorLabel(color) {
         colorLabelRed.innerText = color.red;
@@ -44,7 +81,6 @@ function main() {
         colorSliderGreen.value = color.green;
         colorSliderBlue.value = color.blue;
     }
-
     // Input color code to change the color 
     hexOutput.addEventListener('keyup', (e) => {
         let hex = e.target.value
@@ -82,34 +118,92 @@ function main() {
         colorLabelBlue.innerText = color.blue;
     });
 
-    // Copy code by click event 
-    const tostMsg = document.getElementById("tost-msg");
-    const tostCode = document.getElementById("tost-code");
-    const rmTost = document.getElementById("rm-tost");
-    const progress = document.getElementById("progress");
-    copyBtn.addEventListener("click", (color) => {        
+    // preset Color copy handalers
+    presetColorParent.addEventListener('click', (e) => {
+        let presetColorCode;
+        if(e.target.className === "color-box") {
+            presetColorCode = e.target.getAttribute('data-color')
+            navigator.clipboard.writeText(presetColorCode);
+            copySound.volume = .2
+            copySound.play()
+            setTimeout(() => {}, 5000);
+        }
+        // remove tost container
+        if(tostContainer !== null) {
+            tostContainer.remove()
+            tostContainer = null
+        }
+        // check color code
+        if(isValidHex(presetColorCode)) {
+            navigator.clipboard.writeText(presetColorCode);
+            genaretTostMsg(presetColorCode.toUpperCase())
+        }else {
+            alert("Invalid Color! ")
+        }
+
+        const progressBar = document.getElementById("progress");
+        progressBar.addEventListener('animationend', () => {
+            tostContainer.remove()
+        })
+        const rmTost = document.getElementById("rm-tost")
+        rmTost.addEventListener("click", () => {
+            tostContainer.remove()
+        })
+    })
+
+    // Copy code by click event     
+    copyBtn.addEventListener("click", () => {
+        if(tostContainer !== null) {
+            tostContainer.remove()
+            tostContainer = null
+        }
+
         if(isValidHex(`#${hexOutput.value}`)) {
-            tostMsg.classList.add("active");
-            setTimeout(() => {
-                tostMsg.classList.remove("active");
-            }, 5000);
             if(hexMode.checked) {
                 navigator.clipboard.writeText(hexOutput.value);
-                tostCode.innerText = `#${hexOutput.value}`;
+                genaretTostMsg(`#${hexOutput.value}`)
             }else {
                 navigator.clipboard.writeText(rgbOutput.value);
-                tostCode.innerText = rgbOutput.value
+                genaretTostMsg(rgbOutput.value)
             }
         }else {
             alert("Invalid Color! ")
         }
+        // Remove tost massage
+        const progressBar = document.getElementById("progress");
+        progressBar.addEventListener('animationend', () => {
+            tostContainer.remove()
+        })
+        const rmTost = document.getElementById("rm-tost")
+        rmTost.addEventListener("click", () => {
+            tostContainer.remove()
+        })
     })
-    rmTost.addEventListener("click", () => {
-        tostMsg.classList.remove("active");
-    })
+    
 };
 
 
+// Genaret Tost massage 
+function genaretTostMsg(msg) {
+    tostContainer = document.createElement('div');
+    tostContainer.classList = "tost-msg active";
+    tostContainer.innerHTML = `
+        <div class="tost-content">
+            <i class='bx bx-check'></i>
+            <div class="massage">
+                <h3>Copied Success </h3>
+                <span class="color-code" id="tost-code">${msg}</span>
+            </div>
+            <i class='bx bx-x cross' id="rm-tost"></i>
+        </div>
+        <div class="progress" id="progress"></div>`;
+    document.body.appendChild(tostContainer);
+}
+
+/**
+ * Genaret color code 
+ * @returns {object}
+ */
 function genaretColor() {
     let red = Math.floor(Math.random() * 255);
     let green = Math.floor(Math.random() * 255);
@@ -175,3 +269,27 @@ function isValidHex(color) {
 	color = color.substring(1);
 	return /^[0-9A-Fa-f]{6}$/i.test(color);
 }
+
+/**
+ * @param {*} color 
+ * @returns {object}
+ */
+function presetColor(color) {
+    const div = document.createElement('div');
+    div.className = 'color-box';
+    div.style.backgroundColor = color
+    div.setAttribute('data-color', color)
+    return div;
+}
+
+/**
+ * @param {*} parent 
+ * @return {string}
+ */
+function displayColorBox(colors) {
+    colors.forEach((val) => {
+        const colorBox = presetColor(val)
+        presetColorParent.appendChild(colorBox)
+    })
+}
+
