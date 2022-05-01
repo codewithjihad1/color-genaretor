@@ -47,6 +47,7 @@
   color: #e74c3c;
   cursor: pointer;
   background: transparent;
+  margin-left: 10px;
 }
 .display-color {
   width: 100%;
@@ -220,13 +221,12 @@ hr {
 .preset-color {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: start;
   gap: 10px;
 }
 .color-box {
   width: 18%;
   height: 40px;
-  background: gray;
   cursor: pointer;
 }
 

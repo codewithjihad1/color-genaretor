@@ -21,25 +21,23 @@ const defaultPresetColors = [
 	'#03a9f4',
 	'#00bcd4',
 	'#009688',
-	'#80d8ff',
-	'#84ffff',
-	'#a7ffeb',
-	'#c8e6c9',
-	'#dcedc8',
-	'#f0f4c3',
-	'#b9f6ca',
-	'#ccff90',
-	'#ffcc80',
-    '#00ff00',
 ];
+let saveColor = new Array();
 const copySound = new Audio('../audio/copy-sound.wav');
 let tostContainer = null;
 
 // onload handelers 
 window.onload = function() {
     main()
-    // Display color boxes
-    displayColorBox(defaultPresetColors);
+    // Display preset color boxes
+    displayColorBox(presetColorParent, defaultPresetColors);
+
+    const getCustomColors = localStorage.getItem('save-color');
+    
+    if(getCustomColors) {
+        saveColor = JSON.parse(getCustomColors);
+        displayColorBox(customColorParent, saveColor);
+    }
 }
 
 // DOM references 
@@ -56,12 +54,14 @@ const colorSliderBlue = document.getElementById("color-slider-blue");
 const hexMode = document.getElementById("hex-color-mode");
 const rgbMode = document.getElementById("rgb-color-mode");
 const copyBtn = document.getElementById("copy-color-code");
-const presetColorParent = document.getElementById("preset-color");
 const tostMsg = document.getElementById("tost-msg");
 const tostCode = document.getElementById("tost-code");
+const presetColorParent = document.getElementById("preset-color");
+const customColorParent = document.getElementById("custom-color");
+const saveColorBtn = document.getElementById("save-custom-color");
 
-
-function main() {    
+// Event handlers
+function main() {
     randomColor.addEventListener('click', () => {
         const color = genaretColor();
         const hexColor = genaretHexColor(color);
@@ -120,35 +120,11 @@ function main() {
 
     // preset Color copy handalers
     presetColorParent.addEventListener('click', (e) => {
-        let presetColorCode;
-        if(e.target.className === "color-box") {
-            presetColorCode = e.target.getAttribute('data-color')
-            navigator.clipboard.writeText(presetColorCode);
-            copySound.volume = .2
-            copySound.play()
-            setTimeout(() => {}, 5000);
-        }
-        // remove tost container
-        if(tostContainer !== null) {
-            tostContainer.remove()
-            tostContainer = null
-        }
-        // check color code
-        if(isValidHex(presetColorCode)) {
-            navigator.clipboard.writeText(presetColorCode);
-            genaretTostMsg(presetColorCode.toUpperCase())
-        }else {
-            alert("Invalid Color! ")
-        }
-
-        const progressBar = document.getElementById("progress");
-        progressBar.addEventListener('animationend', () => {
-            tostContainer.remove()
-        })
-        const rmTost = document.getElementById("rm-tost")
-        rmTost.addEventListener("click", () => {
-            tostContainer.remove()
-        })
+        handleTostMsg(e)
+    })
+    // custom preset color copy event handlers
+    customColorParent.addEventListener('click', (e) => {
+        handleTostMsg(e)
     })
 
     // Copy code by click event     
@@ -179,9 +155,72 @@ function main() {
             tostContainer.remove()
         })
     })
-    
+
+    // Save custom color boxes
+    saveColorBtn.addEventListener('click', handleCustomPresetColors(customColorParent, hexOutput))
 };
 
+
+// Handale tost massage genaretors  
+function handleTostMsg(msg) {
+    let presetColorCode;
+    if(msg.target.className === "color-box") {
+        presetColorCode = msg.target.getAttribute('data-color')
+        navigator.clipboard.writeText(presetColorCode);
+        copySound.volume = .2
+        copySound.play()
+        setTimeout(() => {}, 5000);
+    }
+    // remove tost container
+    if(tostContainer !== null) {
+        tostContainer.remove()
+        tostContainer = null
+    }
+    // check color code
+    if(isValidHex(presetColorCode)) {
+        navigator.clipboard.writeText(presetColorCode);
+        genaretTostMsg(presetColorCode.toUpperCase())
+    }else {
+        alert("Invalid Color! ")
+    }
+
+    const progressBar = document.getElementById("progress");
+    progressBar.addEventListener('animationend', () => {
+        tostContainer.remove()
+    })
+    const rmTost = document.getElementById("rm-tost")
+    rmTost.addEventListener("click", () => {
+        tostContainer.remove()
+    })
+}
+
+/**
+ * - custom preset color handelers
+ * @returns {function}
+ */
+function handleCustomPresetColors(parentBox, inputColor) {
+    return function() {
+        const color = `#${inputColor.value}`;
+        if(saveColor.includes(color)) {
+            alert("This color is already saved")
+            return;
+        }
+        saveColor.unshift(color);
+        // Remove child color boxes
+        if(saveColor.length > 20) {
+            saveColor = saveColor.slice(0, 20);
+        }
+        if(parentBox.children.length !== 0) {
+            while (parentBox.hasChildNodes()) {  
+                parentBox.removeChild(parentBox.firstChild);
+            }
+        }
+        // Saved custom color values in localstores
+        localStorage.setItem('save-color', JSON.stringify(saveColor));
+
+        displayColorBox(parentBox, saveColor)
+    }
+}
 
 // Genaret Tost massage 
 function genaretTostMsg(msg) {
@@ -286,10 +325,12 @@ function presetColor(color) {
  * @param {*} parent 
  * @return {string}
  */
-function displayColorBox(colors) {
+function displayColorBox(parent, colors) {
     colors.forEach((val) => {
-        const colorBox = presetColor(val)
-        presetColorParent.appendChild(colorBox)
+        if(isValidHex(val)) {
+            const colorBox = presetColor(val)
+            parent.appendChild(colorBox)
+        }
     })
 }
 
