@@ -7,7 +7,9 @@
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
-
+body {
+  background: #dddeee;
+}
 .main-wrap {
   display: flex;
   flex-flow: row wrap;
@@ -15,7 +17,6 @@
   justify-content: center;
   width: 100%;
   min-height: 100vh;
-  background: #dddeee;
 }
 .container {
   max-width: 480px;
@@ -140,8 +141,8 @@
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-  transition: 0.3s cubic-bezier(0.15, -0.24, 0.76, 1.23);
 }
+
 .tost-content {
   display: flex;
   flex-flow: row wrap;
@@ -199,7 +200,7 @@
   border-radius: 2px;
 }
 .tost-msg.active {
-  transform: translateX(0);
+  animation: tostMsgAnimation 0.3s linear forwards;
 }
 .tost-msg.active .progress::before {
   animation: progress 5s linear forwards;
@@ -229,9 +230,71 @@ hr {
   height: 40px;
   cursor: pointer;
 }
+.sec-mt {
+  margin-top: 25px;
+}
+.bg-preview {
+  width: 50%;
+}
+
+.bg-pref-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.preview-bg-img {
+  width: 100%;
+  min-height: 100px;
+  max-height: 150px;
+  margin: 10px 10px 15px 0;
+  background: #dddeee;
+  background-size: cover;
+  background-position: center;
+}
+.bg-upload input {
+  display: none;
+}
+.bg-upload-btn {
+  border: none;
+  outline: none;
+  padding: 7px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+}
+#bg-delete-btn {
+  display: none;
+}
+.bg-controll-wrap {
+  width: 50%;
+  display: none;
+}
+.controll-unit {
+  margin-bottom: 10px;
+}
+.controll-unit h4 {
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+.controll-unit select {
+  width: 100%;
+  outline: none;
+  padding: 3px 7px;
+  font-weight: 500;
+}
 
 @keyframes progress {
   to {
     width: 0;
+  }
+}
+
+@keyframes tostMsgAnimation {
+  0% {
+    transform: translateX(calc(100% + 60px));
+  }
+  100% {
+    transform: translateX(0);
   }
 }

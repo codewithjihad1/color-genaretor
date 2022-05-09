@@ -1,141 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Color Genaretor</title>
-        <link
-            href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
-            rel="stylesheet"
-            />
-        <link rel="stylesheet" href="css/style.css" />
-        <script src="js/main.js" type="text/javascript" defer></script>
-    </head>
-    <body>
-        <section class="main-wrap">
-            <div class="container">
-                <div class="display">
-                    <div class="section-header">
-                        <h2>Display Color</h2>
-                        <button id="random-color">Random Color</button>
-                    </div>
-                    <div class="display-color" id="display-color"></div>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Genaretor</title>
+    <!-- Box icons cdn -->
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+    <!-- Linked css file -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Linked js file -->
+    <script src="js/main.js" type="text/javascript" defer></script>
+</head>
+<body>
+    <section class="main-wrap">
+        <div class="container">
+            <!-- Display colors in the box -->
+            <div class="display">
+                <div class="section-header">
+                    <h2>Display Color </h2>
+                    <button id="random-color">Random Color </button>
                 </div>
-                <div class="colorMode">
-                    <div class="section-header">
-                        <h2>Change & Copy Color</h2>
-                        <div class="buttons">
-                            <button id="save-custom-color">Save </button>
-                            <button id="copy-color-code">Copy </button>
-                        </div>
+                <div class="display-color" id="display-color"></div>
+            </div>
+            <div class="colorMode">
+                <!-- Save & copy color buttons -->
+                <div class="section-header">
+                    <h2>Change & Copy Color</h2>
+                    <div class="buttons">
+                        <button id="save-custom-color">Save </button>
+                        <button id="copy-color-code">Copy </button>
                     </div>
-                    <div class="copy-mode">
-                        <h4>Select Copy Mode</h4>
-                        <div class="radio-group-wrap">
-                            <div class="radio-group">
-                                <input
-                                    type="radio"
-                                    id="hex-color-mode"
-                                    name="color-mode"
-                                    checked
-                                    />
-                                <label for="hex-color-mode">HEX </label>
-                            </div>
-                            <div class="radio-group">
-                                <input type="radio" id="rgb-color-mode" name="color-mode" />
-                                <label for="rgb-color-mode">RGB </label>
-                            </div>
+                </div>
+                <!-- seclect color mode -->
+                <div class="copy-mode">
+                    <h4>Select Copy Mode</h4>
+                    <div class="radio-group-wrap">
+                        <div class="radio-group">
+                            <input type="radio" id="hex-color-mode" name="color-mode" checked />
+                            <label for="hex-color-mode">HEX </label>
                         </div>
-                    </div>
-                    <div class="color-group-wrap">
-                        <div class="color-group">
-                            <label for="hex-input">HEX </label>
-                            <input
-                                type="text"
-                                id="hex-output"
-                                value="DDDEEE"
-                                placeholder="DDDEEE"
-                                class="text-input text-input-hex"
-                                />
-                            <i class="bx bx-hash"></i>
-                        </div>
-                        <div class="color-group">
-                            <label for="rgb-input">RGB </label>
-                            <input
-                                type="text"
-                                id="rgb-output"
-                                value="rgb(221,222,238)"
-                                placeholder="rgb(221,222,238)"
-                                class="text-input"
-                                disabled
-                                />
-                        </div>
-                    </div>
-                    <div class="color-slider-group">
-                        <h2>Adjust RGB color</h2>
-                        <div class="color-slider-wrap">
-                            <div class="color-slider">
-                                <div class="color-slider-text">
-                                    <span>Red </span>
-                                    <span id="color-slider-red-label">221</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    value="221"
-                                    min="0"
-                                    max="255"
-                                    id="color-slider-red"
-                                    class="color-range"
-                                    />
-                            </div>
-                            <div class="color-slider">
-                                <div class="color-slider-text">
-                                    <span>Green </span>
-                                    <span id="color-slider-green-label">222</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    value="222"
-                                    min="0"
-                                    max="255"
-                                    id="color-slider-green"
-                                    class="color-range"
-                                    />
-                            </div>
-                            <div class="color-slider">
-                                <div class="color-slider-text">
-                                    <span>Blue </span>
-                                    <span id="color-slider-blue-label">238 </span>
-                                </div>
-                                <input
-                                    type="range"
-                                    value="238"
-                                    min="0"
-                                    max="255"
-                                    id="color-slider-blue"
-                                    class="color-range"
-                                    />
-                            </div>
+                        <div class="radio-group">
+                            <input type="radio" id="rgb-color-mode" name="color-mode" />
+                            <label for="rgb-color-mode">RGB </label>
                         </div>
                     </div>
                 </div>
-                <!-- color preset section -->
-                <div class="preset-wrap">
-                    <div class="sec-title">
-                        <h3>Color Preset</h3>
-                        <hr />
+                <!-- show color code section -->
+                <div class="color-group-wrap">
+                    <div class="color-group">
+                        <label for="hex-input">HEX </label>
+                        <input type="text" id="hex-output" value="DDDEEE" placeholder="DDDEEE" class="text-input text-input-hex" />
+                        <i class="bx bx-hash"></i>
                     </div>
-                    <div class="preset-color" id="preset-color"></div>
+                    <div class="color-group">
+                        <label for="rgb-input">RGB </label>
+                        <input type="text" id="rgb-output" value="rgb(221,222,238)" placeholder="rgb(221,222,238)" class="text-input" disabled />
+                    </div>
                 </div>
-                <div class="custom-color-wrap">
-                    <div class="sec-title">
-                        <h3>Custom Colors </h3>
-                        <hr />
+                <!-- Color range slider section -->
+                <div class="color-slider-group">
+                    <h2>Adjust RGB color</h2>
+                    <div class="color-slider-wrap">
+                        <div class="color-slider">
+                            <div class="color-slider-text">
+                                <span>Red </span>
+                                <span id="color-slider-red-label">221</span>
+                            </div>
+                            <input type="range" value="221" min="0" max="255" id="color-slider-red" class="color-range" />
+                        </div>
+                        <div class="color-slider">
+                            <div class="color-slider-text">
+                                <span>Green </span>
+                                <span id="color-slider-green-label">222</span>
+                            </div>
+                            <input type="range" value="222" min="0" max="255" id="color-slider-green" class="color-range" />
+                        </div>
+                        <div class="color-slider">
+                            <div class="color-slider-text">
+                                <span>Blue </span>
+                                <span id="color-slider-blue-label">238 </span>
+                            </div>
+                            <input type="range" value="238" min="0" max="255" id="color-slider-blue" class="color-range" />
+                        </div>
                     </div>
-                    <div class="preset-color" id="custom-color"></div>
                 </div>
             </div>
-        </section>
-    </body>
+            <!-- color preset section -->
+            <div class="preset-wrap sec-mt">
+                <div class="sec-title">
+                    <h3>Color Preset</h3>
+                    <hr />
+                </div>
+                <div class="preset-color" id="preset-color"></div>
+            </div>
+            <!-- Saved custon colors -->
+            <div class="custom-color-wrap sec-mt">
+                <div class="sec-title">
+                    <h3>Custom Colors </h3>
+                    <hr />
+                </div>
+                <div class="preset-color" id="custom-color"></div>
+            </div>
+            <!-- Background preference section -->
+            <div class="bg-prefer-wrap sec-mt">
+                <div class="sec-title">
+                    <h3>Background preference </h3>
+                    <hr/>
+                </div>
+                <div class="bg-pref-content">
+                    <div class="bg-preview">
+                        <h4>Backgorund Preview </h4>
+                        <div class="preview-bg-img" id="preview-bg-img"></div>
+                        <div class="bg-upload">
+                            <input type="file" id="bg-upload" accept="image/*">
+                            <button id="bg-upload-btn" class="bg-upload-btn">Upload </button>
+                            <button id="bg-delete-btn" class="bg-upload-btn">Delete </button>
+                        </div>
+                    </div>
+                    <!-- Background preferences controller -->
+                    <div class="bg-controll-wrap" id="bg-controll-wrap">
+                        <div class="controll-unit">
+                            <h4>Backgorund size </h4>
+                            <select id="bg-size">
+                                <option selected>Select </option>
+                                <option value="auto">Auto </option>
+                                <option value="cover" >Cover </option>
+                                <option value="contain">Contain </option>
+                                <option value="initial">initial </option>
+                                <option value="inherit">inherit </option>
+                                <option value="length">length </option>
+                            </select>
+                        </div>
+                        <div class="controll-unit">
+                            <h4>Backgorund Position </h4>
+                            <select id="bg-position">
+                                <option selected>Select </option>
+                                <option value="left top">left top </option>
+                                <option value="left center" >left center </option>
+                                <option value="left bottom">left bottom </option>
+                                <option value="right top">right top </option>
+                                <option value="right center">right center </option>
+                                <option value="right bottom">right bottom </option>
+                                <option value="center top">center top </option>
+                                <option value="center center">center center </option>
+                                <option value="center bottom">center bottom </option>
+                            </select>
+                        </div>
+                        <div class="controll-unit">
+                            <h4>Backgorund Repeat </h4>
+                            <select id="bg-repeat">
+                                <option selected>Select </option>
+                                <option value="repeat">repeat </option>
+                                <option value="repeat-x" >repeat-x </option>
+                                <option value="repeat-y">repeat-y </option>
+                                <option value="no-repeat">no-repeat </option>
+                                <option value="initial">initial </option>
+                                <option value="inherit">inherit </option>
+                            </select>
+                        </div>
+                        <div class="controll-unit">
+                            <h4>Backgorund Attachment </h4>
+                            <select id="bg-attachment">
+                                <option selected>Select </option>
+                                <option value="scroll">scroll </option>
+                                <option value="fixed">fixed </option>
+                                <option value="local">local </option>
+                                <option value="initial">initial </option>
+                                <option value="inherit">inherit </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
 </html>

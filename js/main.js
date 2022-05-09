@@ -41,6 +41,7 @@ window.onload = function() {
 }
 
 // DOM references 
+const body = document.querySelector('body');
 const randomColor = document.getElementById("random-color");
 const displayColor = document.getElementById("display-color");
 const hexOutput = document.getElementById("hex-output");
@@ -207,8 +208,8 @@ function handleCustomPresetColors(parentBox, inputColor) {
         }
         saveColor.unshift(color);
         // Remove child color boxes
-        if(saveColor.length > 20) {
-            saveColor = saveColor.slice(0, 20);
+        if(saveColor.length > 10) {
+            saveColor = saveColor.slice(0, 10);
         }
         if(parentBox.children.length !== 0) {
             while (parentBox.hasChildNodes()) {  
@@ -334,3 +335,50 @@ function displayColorBox(parent, colors) {
     })
 }
 
+
+// Background preferences controller 
+const bgUpload = document.getElementById('bg-upload');
+const bgUploadBtn = document.getElementById('bg-upload-btn');
+const bgDeleteBtn = document.getElementById('bg-delete-btn');
+const previewBgImg = document.getElementById('preview-bg-img');
+const bgController = document.getElementById('bg-controll-wrap');
+
+// Background preview controller
+bgUploadBtn.addEventListener('click', () => {
+    bgUpload.click();
+})
+bgUpload.addEventListener('change', (e) => {
+    const files = e.target.files[0];
+    const imgUrl = URL.createObjectURL(files);
+    previewBgImg.style.backgroundImage = `url(${imgUrl})`;
+    body.style.backgroundImage = `url(${imgUrl})`;
+    bgDeleteBtn.style.display = 'inline-block';
+    bgController.style.display = 'block';
+})
+bgDeleteBtn.addEventListener('click', () => {
+    previewBgImg.style.backgroundImage = `none`;
+    body.style.backgroundImage = `none`;
+    bgDeleteBtn.style.display = 'none';
+    bgController.style.display = 'none';
+    bgUpload.value = null;
+})
+
+// Background image controller
+const bgSize = document.getElementById('bg-size');
+const bgPosition = document.getElementById('bg-position');
+const bgRepeat = document.getElementById('bg-repeat');
+const bgAttachment = document.getElementById('bg-attachment');
+const controllUnit = document.querySelectorAll('.controll-unit select');
+
+bgSize.addEventListener('change', () => {
+    body.style.backgroundSize = bgSize.value;
+});
+bgPosition.addEventListener('change', () => {
+    body.style.backgroundPosition = bgPosition.value;
+});
+bgRepeat.addEventListener('change', () => {
+    body.style.backgroundRepeat = bgRepeat.value;
+});
+bgAttachment.addEventListener('change', () => {
+    body.style.backgroundAttachment = bgAttachment.value;
+});
